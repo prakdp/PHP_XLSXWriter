@@ -250,9 +250,11 @@ class XLSXWriter
 		$sheet->columns = $this->initializeColumnTypes($header_types);
 		if (!$suppress_row)
 		{
-			$header_row = array_keys($header_types);      
+			$header_row = array_keys($header_types);
 
-			$sheet->file_writer->write('<row collapsed="false" customFormat="false" customHeight="false" hidden="false" ht="12.1" outlineLevel="0" r="' . (1) . '">');
+			$ht = isset($style['height']) ? floatval($style['height']) : 12.1;
+			$customHt = isset($style['height']) ? true : false;
+			$sheet->file_writer->write('<row collapsed="false" customFormat="false" customHeight="'.($customHt ? 'true' : 'false').'" hidden="false" ht="'.($ht).'" outlineLevel="0" r="' . (1) . '">');
 			foreach ($header_row as $c => $v) {
 				$cell_style_idx = empty($style) ? $sheet->columns[$c]['default_cell_style'] : $this->addCellStyle( 'GENERAL', json_encode(isset($style[0]) ? $style[$c] : $style) );
 				$this->writeCell($sheet->file_writer, 0, $c, $v, $number_format_type='n_string', $cell_style_idx);
